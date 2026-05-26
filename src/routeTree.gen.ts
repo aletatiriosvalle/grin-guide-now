@@ -15,6 +15,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedAppIndexRouteImport } from './routes/_authenticated/app.index'
 import { Route as AuthenticatedAppPatientsRouteImport } from './routes/_authenticated/app.patients'
 import { Route as AuthenticatedAppCalendarRouteImport } from './routes/_authenticated/app.calendar'
+import { Route as ApiPublicHooksSendRemindersRouteImport } from './routes/api/public/hooks/send-reminders'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -47,6 +48,12 @@ const AuthenticatedAppCalendarRoute =
     path: '/app/calendar',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const ApiPublicHooksSendRemindersRoute =
+  ApiPublicHooksSendRemindersRouteImport.update({
+    id: '/api/public/hooks/send-reminders',
+    path: '/api/public/hooks/send-reminders',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -54,6 +61,7 @@ export interface FileRoutesByFullPath {
   '/app/calendar': typeof AuthenticatedAppCalendarRoute
   '/app/patients': typeof AuthenticatedAppPatientsRoute
   '/app/': typeof AuthenticatedAppIndexRoute
+  '/api/public/hooks/send-reminders': typeof ApiPublicHooksSendRemindersRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -61,6 +69,7 @@ export interface FileRoutesByTo {
   '/app/calendar': typeof AuthenticatedAppCalendarRoute
   '/app/patients': typeof AuthenticatedAppPatientsRoute
   '/app': typeof AuthenticatedAppIndexRoute
+  '/api/public/hooks/send-reminders': typeof ApiPublicHooksSendRemindersRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -70,12 +79,25 @@ export interface FileRoutesById {
   '/_authenticated/app/calendar': typeof AuthenticatedAppCalendarRoute
   '/_authenticated/app/patients': typeof AuthenticatedAppPatientsRoute
   '/_authenticated/app/': typeof AuthenticatedAppIndexRoute
+  '/api/public/hooks/send-reminders': typeof ApiPublicHooksSendRemindersRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/app/calendar' | '/app/patients' | '/app/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/app/calendar'
+    | '/app/patients'
+    | '/app/'
+    | '/api/public/hooks/send-reminders'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/app/calendar' | '/app/patients' | '/app'
+  to:
+    | '/'
+    | '/auth'
+    | '/app/calendar'
+    | '/app/patients'
+    | '/app'
+    | '/api/public/hooks/send-reminders'
   id:
     | '__root__'
     | '/'
@@ -84,12 +106,14 @@ export interface FileRouteTypes {
     | '/_authenticated/app/calendar'
     | '/_authenticated/app/patients'
     | '/_authenticated/app/'
+    | '/api/public/hooks/send-reminders'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AuthRoute: typeof AuthRoute
+  ApiPublicHooksSendRemindersRoute: typeof ApiPublicHooksSendRemindersRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -136,6 +160,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppCalendarRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/api/public/hooks/send-reminders': {
+      id: '/api/public/hooks/send-reminders'
+      path: '/api/public/hooks/send-reminders'
+      fullPath: '/api/public/hooks/send-reminders'
+      preLoaderRoute: typeof ApiPublicHooksSendRemindersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -159,7 +190,18 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AuthRoute: AuthRoute,
+  ApiPublicHooksSendRemindersRoute: ApiPublicHooksSendRemindersRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
