@@ -20,6 +20,10 @@ export type Appointment = {
   treatment: string;
   status: "scheduled" | "done" | "cancelled" | string;
   notes: string | null;
+  manage_token?: string;
+  reminder_sent_at?: string | null;
+  cancelled_at?: string | null;
+  reschedule_requested?: boolean;
   patient?: Patient | null;
 };
 
