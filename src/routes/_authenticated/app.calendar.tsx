@@ -8,6 +8,8 @@ import { format, isSameDay } from "date-fns";
 import { es } from "date-fns/locale";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { toast } from "sonner";
+import { Link2, BellRing, BellOff } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/app/calendar")({
   component: CalendarPage,
@@ -69,9 +71,33 @@ function CalendarPage() {
                       >
                         <div className="flex items-center justify-between">
                           <span className="font-semibold">{format(new Date(a.starts_at), "HH:mm")} · {a.patient?.full_name}</span>
-                          <Badge variant="outline" className="border-white/40 text-white/90 bg-white/10">
-                            {a.duration_min}min
-                          </Badge>
+                          <div className="flex items-center gap-1.5">
+                            {a.reminder_sent_at ? (
+                              <Badge variant="outline" className="border-white/40 text-white/90 bg-white/10 gap-1">
+                                <BellRing className="h-3 w-3" /> Recordado
+                              </Badge>
+                            ) : (
+                              <Badge variant="outline" className="border-white/40 text-white/70 bg-white/5 gap-1">
+                                <BellOff className="h-3 w-3" /> Pendiente
+                              </Badge>
+                            )}
+                            <Badge variant="outline" className="border-white/40 text-white/90 bg-white/10">
+                              {a.duration_min}min
+                            </Badge>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              className="h-6 px-2 text-white hover:bg-white/15"
+                              onClick={() => {
+                                const url = `${window.location.origin}/manage/${a.manage_token}`;
+                                navigator.clipboard.writeText(url);
+                                toast.success("Link copiado", { description: url });
+                              }}
+                              title="Copiar link de gestión para el paciente"
+                            >
+                              <Link2 className="h-3.5 w-3.5" />
+                            </Button>
+                          </div>
                         </div>
                         <div className="text-xs text-white/80 mt-0.5">{a.treatment}</div>
                       </div>

@@ -12,9 +12,12 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ManageTokenRouteImport } from './routes/manage.$token'
 import { Route as AuthenticatedAppIndexRouteImport } from './routes/_authenticated/app.index'
 import { Route as AuthenticatedAppPatientsRouteImport } from './routes/_authenticated/app.patients'
 import { Route as AuthenticatedAppCalendarRouteImport } from './routes/_authenticated/app.calendar'
+import { Route as ApiPublicHooksSendRemindersRouteImport } from './routes/api/public/hooks/send-reminders'
+import { Route as ApiPublicAppointmentsTokenRouteImport } from './routes/api/public/appointments.$token'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -28,6 +31,11 @@ const AuthenticatedRoute = AuthenticatedRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ManageTokenRoute = ManageTokenRouteImport.update({
+  id: '/manage/$token',
+  path: '/manage/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedAppIndexRoute = AuthenticatedAppIndexRouteImport.update({
@@ -47,49 +55,92 @@ const AuthenticatedAppCalendarRoute =
     path: '/app/calendar',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const ApiPublicHooksSendRemindersRoute =
+  ApiPublicHooksSendRemindersRouteImport.update({
+    id: '/api/public/hooks/send-reminders',
+    path: '/api/public/hooks/send-reminders',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicAppointmentsTokenRoute =
+  ApiPublicAppointmentsTokenRouteImport.update({
+    id: '/api/public/appointments/$token',
+    path: '/api/public/appointments/$token',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/manage/$token': typeof ManageTokenRoute
   '/app/calendar': typeof AuthenticatedAppCalendarRoute
   '/app/patients': typeof AuthenticatedAppPatientsRoute
   '/app/': typeof AuthenticatedAppIndexRoute
+  '/api/public/appointments/$token': typeof ApiPublicAppointmentsTokenRoute
+  '/api/public/hooks/send-reminders': typeof ApiPublicHooksSendRemindersRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/manage/$token': typeof ManageTokenRoute
   '/app/calendar': typeof AuthenticatedAppCalendarRoute
   '/app/patients': typeof AuthenticatedAppPatientsRoute
   '/app': typeof AuthenticatedAppIndexRoute
+  '/api/public/appointments/$token': typeof ApiPublicAppointmentsTokenRoute
+  '/api/public/hooks/send-reminders': typeof ApiPublicHooksSendRemindersRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/auth': typeof AuthRoute
+  '/manage/$token': typeof ManageTokenRoute
   '/_authenticated/app/calendar': typeof AuthenticatedAppCalendarRoute
   '/_authenticated/app/patients': typeof AuthenticatedAppPatientsRoute
   '/_authenticated/app/': typeof AuthenticatedAppIndexRoute
+  '/api/public/appointments/$token': typeof ApiPublicAppointmentsTokenRoute
+  '/api/public/hooks/send-reminders': typeof ApiPublicHooksSendRemindersRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/app/calendar' | '/app/patients' | '/app/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/manage/$token'
+    | '/app/calendar'
+    | '/app/patients'
+    | '/app/'
+    | '/api/public/appointments/$token'
+    | '/api/public/hooks/send-reminders'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/app/calendar' | '/app/patients' | '/app'
+  to:
+    | '/'
+    | '/auth'
+    | '/manage/$token'
+    | '/app/calendar'
+    | '/app/patients'
+    | '/app'
+    | '/api/public/appointments/$token'
+    | '/api/public/hooks/send-reminders'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/manage/$token'
     | '/_authenticated/app/calendar'
     | '/_authenticated/app/patients'
     | '/_authenticated/app/'
+    | '/api/public/appointments/$token'
+    | '/api/public/hooks/send-reminders'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AuthRoute: typeof AuthRoute
+  ManageTokenRoute: typeof ManageTokenRoute
+  ApiPublicAppointmentsTokenRoute: typeof ApiPublicAppointmentsTokenRoute
+  ApiPublicHooksSendRemindersRoute: typeof ApiPublicHooksSendRemindersRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -115,6 +166,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/manage/$token': {
+      id: '/manage/$token'
+      path: '/manage/$token'
+      fullPath: '/manage/$token'
+      preLoaderRoute: typeof ManageTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/app/': {
       id: '/_authenticated/app/'
       path: '/app'
@@ -135,6 +193,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/app/calendar'
       preLoaderRoute: typeof AuthenticatedAppCalendarRouteImport
       parentRoute: typeof AuthenticatedRoute
+    }
+    '/api/public/hooks/send-reminders': {
+      id: '/api/public/hooks/send-reminders'
+      path: '/api/public/hooks/send-reminders'
+      fullPath: '/api/public/hooks/send-reminders'
+      preLoaderRoute: typeof ApiPublicHooksSendRemindersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/appointments/$token': {
+      id: '/api/public/appointments/$token'
+      path: '/api/public/appointments/$token'
+      fullPath: '/api/public/appointments/$token'
+      preLoaderRoute: typeof ApiPublicAppointmentsTokenRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
@@ -159,6 +231,9 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AuthRoute: AuthRoute,
+  ManageTokenRoute: ManageTokenRoute,
+  ApiPublicAppointmentsTokenRoute: ApiPublicAppointmentsTokenRoute,
+  ApiPublicHooksSendRemindersRoute: ApiPublicHooksSendRemindersRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
