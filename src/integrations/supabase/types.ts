@@ -16,11 +16,15 @@ export type Database = {
     Tables: {
       appointments: {
         Row: {
+          cancelled_at: string | null
           created_at: string
           duration_min: number
           id: string
+          manage_token: string
           notes: string | null
           patient_id: string
+          reminder_sent_at: string | null
+          reschedule_requested: boolean
           starts_at: string
           status: string
           treatment: string
@@ -28,11 +32,15 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          cancelled_at?: string | null
           created_at?: string
           duration_min?: number
           id?: string
+          manage_token?: string
           notes?: string | null
           patient_id: string
+          reminder_sent_at?: string | null
+          reschedule_requested?: boolean
           starts_at: string
           status?: string
           treatment: string
@@ -40,11 +48,15 @@ export type Database = {
           user_id: string
         }
         Update: {
+          cancelled_at?: string | null
           created_at?: string
           duration_min?: number
           id?: string
+          manage_token?: string
           notes?: string | null
           patient_id?: string
+          reminder_sent_at?: string | null
+          reschedule_requested?: boolean
           starts_at?: string
           status?: string
           treatment?: string
