@@ -76,7 +76,7 @@ function AuthLayout() {
 function NavItem({ to, icon, children }: { to: string; icon: React.ReactNode; children: React.ReactNode }) {
   return (
     <Link
-      to={to}
+      to={to as never}
       activeOptions={{ exact: to === "/app" }}
       className="flex items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-colors"
       activeProps={{ className: "bg-sidebar-accent text-sidebar-foreground" }}

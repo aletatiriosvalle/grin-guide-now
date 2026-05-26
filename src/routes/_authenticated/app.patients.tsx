@@ -6,7 +6,7 @@ import { Trash2, Mail, Phone, CalendarDays } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/_authenticated/patients")({
+export const Route = createFileRoute("/_authenticated/app/patients")({
   component: PatientsPage,
 });
 
