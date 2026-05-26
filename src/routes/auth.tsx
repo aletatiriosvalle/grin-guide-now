@@ -76,7 +76,7 @@ function AuthPage() {
           <div className="lg:hidden mb-8 flex items-center gap-2 font-display text-2xl font-semibold">
             <Sparkles className="size-5 text-primary" /> Sonrisa
           </div>
-          <h2 className="text-3xl font-bold">Para una sonrisa de película/h2>
+          <h2 className="text-3xl font-bold">Para una sonrisa de película</h2>
           <p className="mt-2 text-sm text-muted-foreground">
             Inicia sesión o crea tu cuenta para empezar a agendar.
           </p>
